@@ -4,17 +4,19 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 
 
 
@@ -46,9 +48,29 @@ public class App extends Application {
     //private Label formMsg;
     //private Label orderMsg;
 
+    //order button
+    private Button orderButton;
+
 
     @Override
     public void start(Stage primaryStage) {
+
+        Alert confirm = new Alert(AlertType.NONE);
+
+        EventHandler<ActionEvent> order = new EventHandler<ActionEvent>() {
+
+            public void handle(ActionEvent e)
+            {
+                // set alert type
+                confirm.setAlertType(AlertType.CONFIRMATION);
+
+                confirm.setContentText("Pizza order has been placed! Look for where your pizza is at on the right!");
+ 
+                // show the dialog
+                confirm.show();
+            }
+            
+        };
 
         //sets up labels
         statusLabel = new Label("Order Status");
@@ -123,12 +145,26 @@ public class App extends Application {
         TextField asuIDBox = new TextField();
         TextField emailBox = new TextField();
 
+        //sets up orderButton
+        Button orderButton = new Button();
+        orderButton.setText("Order Pizza");
+        orderButton.setOnAction(order);
+
+        
+
         //each needs a vbox so label will be ontop
         VBox asuVBox = new VBox();
         VBox emailVbox = new VBox();
         VBox typeVBox = new VBox();
         VBox toppingVbox = new VBox();
         VBox timeVbox = new VBox();
+
+
+        VBox botVbox = new VBox();
+        botVbox.getChildren().addAll(orderButton);
+        orderButton.setPrefHeight(50);
+        orderButton.setPrefWidth(100);
+        botVbox.setPadding(new Insets(90, 10 , 20, 10));
 
         VBox orderStatusVBox = new VBox();
         orderStatusVBox.getChildren().addAll(statusLabel, statusLabel2);
@@ -146,7 +182,10 @@ public class App extends Application {
         VBox rightCol = new VBox();
 
         leftCol.getChildren().addAll(asuVBox, typeVBox, timeVbox);
-        rightCol.getChildren().addAll(emailVbox, toppingVbox);
+        rightCol.getChildren().addAll(emailVbox, toppingVbox, botVbox);
+
+      
+        
         
 
         // Construct a scene graph of nodes
@@ -182,11 +221,14 @@ public class App extends Application {
         // Construct a scene wit, width, and height
         Scene scene = new Scene(root, 700, 500);  
         primaryStage.setScene(scene);    // The stage sets scene
-        primaryStage.setTitle("Order Form");  
+        primaryStage.setTitle("SunDevil Pizza");  
         primaryStage.show();             // Sets to visible
     }
+
+    
 
     public static void main(String[] args) {
         launch(args);
     }
 }
+
