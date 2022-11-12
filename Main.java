@@ -1,8 +1,11 @@
 package application;
-	
+
+//javafx imports
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.beans.binding.Bindings;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.geometry.Insets; 
 import javafx.event.ActionEvent;
@@ -19,42 +22,62 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-
 import javafx.stage.Stage;
+
+
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+//my imports
+import application.User.*;
+import application.Order.*;
 
 
 public class Main extends Application {
    public void move(String moved, String [] fromArray, String [] toArray) {
 	   return;
 	}
+   
+   	//user info
+	User currentUser=new User();
 	@Override
 	public void start(Stage primaryStage) {
 		try {
+			// asu user database ---------------------------------------------------------------------------------------------
+			User[] users;
+			users = new User[20];
+	
+			for(int i=0; i<users.length; i++) {
+				users[i]=null;
+			}
+			//customers
+			users[0] = new User(1, 0, "acontr56@asu.edu");
+			users[1] = new User(2, 0, "sesolis@asu.edu");
+			
+			//processors
+			users[2] = new User(3, 1, "dvgabrie@asu.edu");
+			users[3] = new User(4, 1, "mggamino@asu.edu");
+			
+			//chefs
+			users[4] = new User(5, 2, "bgarci83@asu.edu");
+			users[5] = new User(6, 2, "kmmart47@asu.edu");
+
+			
+			//order data base ---------------------------------------------------------------------------------------------
+			Order[] orders;
+			orders = new Order[20];
+			orders[0] = new Order(3, "Pepperoni", "Mushroom", "09/23/2022     12:00", 0);
+			orders[1] = new Order(2, "Pepperoni", "Onions", "09/23/2022     12:30", 1);
+			orders[2] = new Order(6, "Cheese", "Olives", "09/23/2022     12:00", 2);
+			orders[3] = new Order(1, "Veggie", "Extra Chees", "09/23/2022     12:30", 3);
+			
 			//defaults
 			int room_height = 1200;
 			int room_width = 800;
 			
-			//user info
-			String asuriteId = "test id";
-			String email = "test@asu.edu";
-			String type = "test type";
-			String topping = "test topping";
-			String pickUpTime = "test pick up time";
-			boolean authenticated = true;
-			int status = -1;
 			
-			//new orders
-			String[] newOrders = {"test1", "test2"};
-			//ready to cook
-			String[] readyToCook = {"test3", "test4", "test5", "test6"};
-			//cooking
-			String[] cooking = {"test7", "test8"};
 			
-			VBox layoutAP = new VBox();
-			Scene sceneAP = new Scene(layoutAP, room_height, room_width);
-			Label labelAP = new Label("All Pages");
-			Button buttonAP = new Button("All Pages");
-			buttonAP.setOnAction(e -> primaryStage.setScene(sceneAP));
+			
+			
 			
 			VBox layoutL = new VBox();
 			Scene sceneL = new Scene(layoutL, room_height, room_width);
@@ -81,6 +104,10 @@ public class Main extends Application {
 			Button buttonA = new Button("Authentication");
 			buttonA.setOnAction(e -> primaryStage.setScene(sceneA));
 			
+			VBox layoutNA = new VBox();
+			Scene sceneNA = new Scene(layoutNA, room_height, room_width);
+			Label labelNA = new Label("Authentication");
+
 			
 			VBox layoutS = new VBox();
 			Scene sceneS = new Scene(layoutS, room_height, room_width);
@@ -102,21 +129,44 @@ public class Main extends Application {
 			Button buttonPV = new Button("Processor View");
 			buttonPV.setOnAction(e -> primaryStage.setScene(scenePV));
 			
-			//All Pages
+			//All Pages ---------------------------------------------------------------------------------------------
+			VBox layoutAP = new VBox();
+			Scene sceneAP = new Scene(layoutAP, room_height, room_width);
+			Label labelAP = new Label("All Pages");
+			Button buttonAP = new Button("All Pages");
+			buttonAP.setOnAction(e -> primaryStage.setScene(sceneAP));
+			
 			layoutAP.setAlignment(Pos.CENTER);
 			layoutAP.getChildren().addAll(labelAP, buttonL, buttonCS, buttonOF, buttonA, buttonS, buttonCV, buttonPV);
 
-			//Login					-----------------------------------------------------------
+			//Login ---------------------------------------------------------------------------------------------
 			Label lL_id = new Label("ID:");
 			TextField tfL_id = new TextField();
 			Label lL_email = new Label("EMAIL:");
 			TextField tfL_email = new TextField();
 			Button buttonL_s = new Button("SUBMIT");
+			
 			buttonL_s.setOnAction(e -> {
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setContentText("EMAIL: "+tfL_email.getText()+"\n"+"ASURITE: "+tfL_id.getText());
-				alert.show();
-				primaryStage.setScene(sceneA);
+				int userType = checkUser(tfL_id.getText(), tfL_email.getText(), users);
+				
+				if(userType == -1) {
+					//not authentication
+					primaryStage.setScene(sceneNA);
+				}
+				if(userType == 0) {
+					//authentication
+					currentUser = new User(Integer.parseInt(tfL_id.getText().trim()), userType, tfL_email.getText());
+					primaryStage.setScene(sceneA);
+				}
+				if(userType == 1) {
+					//processor
+					primaryStage.setScene(scenePV);
+				}
+				
+				if(userType == 2) {
+					//chef
+					primaryStage.setScene(sceneCV);
+				}
 			});
 			Button buttonL_c = new Button("CLEAR");
 			buttonL_c.setOnAction(e -> {
@@ -126,7 +176,7 @@ public class Main extends Application {
 			layoutL.setAlignment(Pos.CENTER);
 			layoutL.getChildren().addAll(labelL, lL_id, tfL_id, lL_email, tfL_email, buttonL_s, buttonL_c, buttonCS);
 			
-			//Contact Support			-----------------------------------------------------------
+			//Contact Support ---------------------------------------------------------------------------------------------
 			Label lCS_id = new Label("ID:");
 			TextField tfCS_id = new TextField();
 			Label lCS_message = new Label("MESSAGE:");
@@ -147,48 +197,55 @@ public class Main extends Application {
 			layoutCS.setAlignment(Pos.CENTER);
 			layoutCS.getChildren().addAll(labelCS, lCS_id, tfCS_id, lCS_message, tfCS_message, buttonCS_s, buttonOF_c);
 			
-			//Order Form				-----------------------------------------------------------
+			//Order Form ---------------------------------------------------------------------------------------------
 			layoutOF.setAlignment(Pos.CENTER);
 			layoutOF.getChildren().addAll(labelOF);
 			
-			//Authentication			-----------------------------------------------------------
+			//Authentication ---------------------------------------------------------------------------------------------
+			//failure auth
 			Label lA_title = new Label();
 			Label lA_message = new Label();
 			Button buttonA_next = new Button();
 			
-			if(authenticated==true){
-				lA_title.setText("Thank You!");
-				lA_message.setText("Your ASURITE ID has been accepted, your order has been placed.");
-				buttonA_next.setText("DONE");
-				buttonA_next.setOnAction(e -> primaryStage.setScene(sceneOF));
-			}else{
-				lA_title.setText("Oosp!");
-				lA_message.setText("Your ASURITE ID has not been accepted, your order has been rejected.");
-				buttonA_next.setText("RETRY");
-				buttonA_next.setOnAction(e -> primaryStage.setScene(sceneL));
-			}
+			lA_title.setText("Thank You!");
+			lA_message.setText("Your ASURITE ID has been accepted, your order has been placed.");
+			buttonA_next.setText("DONE");
+			buttonA_next.setOnAction(e -> primaryStage.setScene(sceneOF));
 			
+			// success auth
+			Label lNA_title = new Label();
+			Label lNA_message = new Label();
+			Button buttonNA_next = new Button();
+			
+			lNA_title.setText("Oosp!");
+			lNA_message.setText("Your ASURITE ID has not been accepted, your order has been rejected.");
+			buttonNA_next.setText("RETRY");
+			buttonNA_next.setOnAction(e -> primaryStage.setScene(sceneL));
+		
 			
 			layoutA.setAlignment(Pos.CENTER);
 			layoutA.getChildren().addAll(labelA, lA_title, lA_message, buttonA_next);
+	        
+			layoutNA.setAlignment(Pos.CENTER);
+			layoutNA.getChildren().addAll(labelNA, lNA_title, lNA_message, buttonNA_next);
 	        
 			
 			//Status			-----------------------------------------------------------
 			SplitPane spS = new SplitPane(); 
 		    
 	        Label lS_id = new Label();
-	        lS_id.textProperty().bind(Bindings.format("ASURITE ID: %s", asuriteId));
+	        lS_id.textProperty().bind(Bindings.format("ASURITE ID: %s", currentUser.id));
 
 		    Label lS_email = new Label();
-		    lS_email.textProperty().bind(Bindings.format("EMAIL: %s", email));
+		    lS_email.textProperty().bind(Bindings.format("EMAIL: %s", currentUser.email));
 		    
 		    Label lS_type = new Label();
-		    lS_type.textProperty().bind(Bindings.format("TYPE: %s", type));
+		    lS_type.textProperty().bind(Bindings.format("TYPE: %s", currentUser.type));
 		    
 		    Label lS_topping = new Label();
-		    lS_topping.textProperty().bind(Bindings.format("TOPPING: %s", topping));
+		    lS_topping.textProperty().bind(Bindings.format("TOPPING: %s", currentUser.order.topping));
 		    Label lS_pickUpTime = new Label();
-		    lS_pickUpTime.textProperty().bind(Bindings.format("PICK UP TIME: %s", pickUpTime));
+		    lS_pickUpTime.textProperty().bind(Bindings.format("PICK UP TIME: %s", currentUser.order.pickUpTime));
 		    
 		    
 		    Label lS_order = new Label("ORDER");
@@ -209,7 +266,7 @@ public class Main extends Application {
 			layoutS.getChildren().addAll(spS);
 			
 			
-			//Chef View					-----------------------------------------------------------
+			//Chef View ---------------------------------------------------------------------------------------------
 			layoutCV.setAlignment(Pos.CENTER);
 			layoutCV.getChildren().addAll(labelCV);
 			SplitPane spCV = new SplitPane(); 
@@ -235,7 +292,9 @@ public class Main extends Application {
 	        
 	        layoutCV.setAlignment(Pos.CENTER);
 			layoutCV.getChildren().addAll(spCV);
-			//Processing View			-----------------------------------------------------------
+			
+			
+			//Processing View ---------------------------------------------------------------------------------------------
 			SplitPane spPV = new SplitPane(); 
 			
 		    Label lPV_newOrders = new Label("NEW ORDERS");
@@ -245,8 +304,13 @@ public class Main extends Application {
 		    
 		    //new orders
 		    ListView lvPv_newOrders = new ListView();
-		    for(int i=0; i<newOrders.length; i++){
-		    	lvPv_newOrders.getItems().add(newOrders[i]);
+		    for(int i=0; i<orders.length; i++){
+		    	if(orders[i]==null) {
+		    		break;
+		    	}
+		    	if(orders[i].status==1) {
+		    		lvPv_newOrders.getItems().add(orders[i].id +","+orders[i].type +", "+orders[i].topping+", "+orders[i].pickUpTime);
+		    	}
 		    }
 		    
 		    VBox leftPV = new VBox(lPV_newOrders, bPV_refresh, lvPv_newOrders);
@@ -261,8 +325,13 @@ public class Main extends Application {
 		    
 		    //ready to cook
 		    ListView lvPv_readyToCook = new ListView();
-		    for(int i=0; i<readyToCook.length; i++){
-		    	lvPv_readyToCook.getItems().add(readyToCook[i]);
+		    for(int i=1; i<orders.length; i++){
+		    	if(orders[i]==null) {
+		    		break;
+		    	}
+		    	if(orders[i].status==2) {
+		    		lvPv_readyToCook.getItems().add(orders[i].id +","+orders[i].type +", "+orders[i].topping+", "+orders[i].pickUpTime);
+		    	}
 		    }
 	        VBox rightPV = new VBox(lPV_readyToCook, lvPv_readyToCook);
 	        rightPV.setMaxHeight(room_height);
@@ -274,6 +343,18 @@ public class Main extends Application {
 	        	Object selected = lvPv_newOrders.getSelectionModel().getSelectedItem();
 	        	if(selected!=null) {
 		        	lvPv_readyToCook.getItems().add(selected);
+		        	String userIdStr = selected.toString().split(",")[0].trim(); 
+		        	int userId = Integer.parseInt(userIdStr);
+		        	
+				    for(int i=1; i<orders.length; i++){
+				    	if(orders[i]==null) {
+				    		break;
+				    	}
+				    	if(orders[i].id==userId) {
+				    		orders[i].status++;
+				    		break;
+				    	}
+				    }
 		        	lvPv_newOrders.getItems().remove(selected);
 	        	}
 	        });
@@ -296,6 +377,25 @@ public class Main extends Application {
 		}
 	}
 	
+	public int checkUser(String loginId, String loginEmail, User[] users) {
+		int returnType = -1;
+		
+		//look through database
+		for(int i=0; i < users.length; i++) {
+			//end if null
+			if(users[i]==null) {
+				break;
+			}
+			
+			//end if match;
+			if(loginId.equals(Integer.toString(users[i].id)) && loginEmail.equals(users[i].email)) {
+				returnType=users[i].type;
+				break;
+			}
+		}
+		
+		return returnType; 	
+	}
 	public static void main(String[] args) {
 		launch(args);
 	}
