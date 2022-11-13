@@ -33,7 +33,7 @@ public class Main extends Application {
 			baconTopping, mushroomTopping, onionTopping, oliveTopping;
 	Button setStatusButton;
 	RadioButton acceptedOrder, readyToCookOrder, cookingOrder, finishedOrder;
-	ToggleGroup ptGroup;
+	ToggleGroup statusGroup;
 	
 	private final int room_height = 400;
 	private final int room_width = 700;
@@ -75,6 +75,7 @@ public class Main extends Application {
 		
 		// chef view — orders section
 		Label userID = new Label("sesolis@asu.edu");
+		
 		GridPane orders = new GridPane();
 		orders.setHgap(10);
 		orders.setVgap(10);
@@ -95,6 +96,7 @@ public class Main extends Application {
 		mushroomTopping = new CheckBox("Mushroom");
 		onionTopping = new CheckBox("Onion");
 		oliveTopping = new CheckBox("Olive");
+		
 		pepperoniTopping.setSelected(true);
 		extraCheeseTopping.setSelected(true);
 		
@@ -111,6 +113,7 @@ public class Main extends Application {
 		detailsSection.setCollapsible(false);
 		detailsSection.setPadding(new Insets(10, 10, 10, 10));
 		
+		// chef view — status section
 		GridPane status = new GridPane();
 		status.setHgap(62);
 		status.setVgap(10);
@@ -124,15 +127,16 @@ public class Main extends Application {
 		setStatusButton.setPrefWidth(100);
 		
 		// status buttons
-		ptGroup = new ToggleGroup();
+		statusGroup = new ToggleGroup();
 		acceptedOrder = new RadioButton("Accepted");
-		acceptedOrder.setToggleGroup(ptGroup);
+		acceptedOrder.setToggleGroup(statusGroup);
 		readyToCookOrder = new RadioButton("Ready to Cook");
-		readyToCookOrder.setToggleGroup(ptGroup);
+		readyToCookOrder.setToggleGroup(statusGroup);
 		cookingOrder = new RadioButton("Cooking");
-		cookingOrder.setToggleGroup(ptGroup);
+		cookingOrder.setToggleGroup(statusGroup);
 		finishedOrder = new RadioButton("Finished");
-		finishedOrder.setToggleGroup(ptGroup);
+		finishedOrder.setToggleGroup(statusGroup);
+		
 		acceptedOrder.setSelected(true);
 		
 		status.addColumn(0, acceptedOrder);
