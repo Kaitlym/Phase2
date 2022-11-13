@@ -1,4 +1,7 @@
-package com.example;
+package application;
+
+
+import java.util.Date;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -20,10 +23,23 @@ import javafx.event.EventHandler;
 
 
 
-/**
- * JavaFX App
- */
-public class App extends Application {
+public class Main extends Application {
+	
+	public static String getDate(int addMinutes) {
+		
+		/*
+		Date date = new java.util.Date(); 
+		addMinutes*=60000;
+		date = new Date(date + addMinutes);
+	    Date newDate = new Date(date + (addMinutes * 60000));
+		*/
+		String dateString = null;
+		//dateString = date.toString();
+		
+		return dateString;
+		
+		
+	}
 
     //drop downs
     private ComboBox<String> typeBox;
@@ -118,7 +134,6 @@ public class App extends Application {
         formMsg = new Label("Order Staus");
         formMsg.setPadding(new Insets(10, 10, 10, 10));
         formMsg.setStyle("-fx-font: 14 Verdana;");
-
         orderMsg = new Label("Order Staus");
         orderMsg.setPadding(new Insets(10, 10, 10, 10));
         orderMsg.setStyle("-fx-font: 14 Verdana;");
@@ -138,7 +153,8 @@ public class App extends Application {
         toppingBox.setValue("Select");
 
         pickTimeBox = new ComboBox<String>();
-        pickTimeBox.getItems().addAll("09/23/2022     12:00", "09/23/2022     12:30");
+        //pickTimeBox.getItems().addAll(getDate());
+      //pickTimeBox.getItems().addAll("09/23/2022     12:00", "09/23/2022     12:30");
         pickTimeBox.setValue("Select");
 
         //sets up text fields
@@ -216,10 +232,12 @@ public class App extends Application {
         top.setStyle("-fx-border-color: black");
 
     
-       
+       orderButton.setId("button1");
         
         // Construct a scene wit, width, and height
-        Scene scene = new Scene(root, 700, 500);  
+        Scene scene = new Scene(root, 700, 500); 
+        scene.getStylesheets().clear();
+        scene.getStylesheets().add(getClass().getResource("styleSheet.css").toExternalForm());
         primaryStage.setScene(scene);    // The stage sets scene
         primaryStage.setTitle("SunDevil Pizza");  
         primaryStage.show();             // Sets to visible
@@ -231,4 +249,3 @@ public class App extends Application {
         launch(args);
     }
 }
-
