@@ -1,7 +1,10 @@
 package application;
 
 
+
 import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -9,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -24,28 +28,15 @@ import javafx.event.EventHandler;
 
 
 public class Main extends Application {
-	
-	public static String getDate(int addMinutes) {
-		
-		/*
-		Date date = new java.util.Date(); 
-		addMinutes*=60000;
-		date = new Date(date + addMinutes);
-	    Date newDate = new Date(date + (addMinutes * 60000));
-		*/
-		String dateString = null;
-		//dateString = date.toString();
-		
-		return dateString;
-		
-		
-	}
-
+  
     //drop downs
     private ComboBox<String> typeBox;
-    private ComboBox<String> toppingBox;
-
     private ComboBox<String> pickTimeBox;
+
+    private CheckBox mushroomBox;
+    private CheckBox onionsBox;
+    private CheckBox olivesBox;
+    private CheckBox ecBox;
 
     //text boxes
     private TextField asuIDBox;
@@ -67,26 +58,86 @@ public class Main extends Application {
     //order button
     private Button orderButton;
 
+    /*************
+     * Takes in int to add minutes to current time
+     * this is for the pickupTime ComboBox
+     * returns string to add to box 
+     * 
+     * @param addMinutes 
+     * @return
+     */
+    public static String getDate(int addMinutes) {
+		
+       
+        SimpleDateFormat sdf=new SimpleDateFormat("EEE, MMM d, hh:mm aaa");
 
-    @Override
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MINUTE, addMinutes);
+        int mod = cal.get(Calendar.MINUTE);
+        mod = mod % 15;
+        
+    
+        cal.add(Calendar.MINUTE, mod < 8 ? -mod : (15-mod));
+        Date date = cal.getTime();
+    
+		
+		return sdf.format(date);
+		
+		
+	}
+
+    public static String getBoxContent(ComboBox<String> n) {
+
+        String i = n.getValue();
+
+        return i;
+
+
+    }
+
+    public static boolean getToppingContent(CheckBox n) {
+
+        boolean i = n.isSelected();
+
+        return i;
+
+
+    }
+    
     public void start(Stage primaryStage) {
 
+        
+        /*for onclick pizza button, should add to move to status page */
         Alert confirm = new Alert(AlertType.NONE);
 
         EventHandler<ActionEvent> order = new EventHandler<ActionEvent>() {
 
-            public void handle(ActionEvent e)
-            {
+            public void handle(ActionEvent e){
+                typeBox.setValue("Select");
+
+           
+                if(typeBox.getValue() == "Select" || pickTimeBox.getValue() == "Select" ){
+
+                    confirm.setAlertType(AlertType.ERROR);
+                    confirm.setContentText("One or more boxes have no selections");
+                }
+
+                else{
                 // set alert type
                 confirm.setAlertType(AlertType.CONFIRMATION);
 
                 confirm.setContentText("Pizza order has been placed! Look for where your pizza is at on the right!");
- 
+                }
                 // show the dialog
                 confirm.show();
             }
             
         };
+        /** end onclick handler */
+
+        
+
+
 
         //sets up labels
         statusLabel = new Label("Order Status");
@@ -119,7 +170,7 @@ public class Main extends Application {
         emailLabel.setStyle("-fx-font: 14 Verdana;");
 
         toppingLabel = new Label("Toppings");
-        toppingLabel.setPadding(new Insets(10, 10, 10, 10));
+        toppingLabel.setPadding(new Insets(10, 10, 20, 10));
         toppingLabel.setStyle("-fx-font: 14 Verdana;");
 
         pickUpTimeLabel = new Label("Pickup");
@@ -141,6 +192,15 @@ public class Main extends Application {
         
 
 
+        mushroomBox = new CheckBox("Mushroom");
+        mushroomBox.setPadding(new Insets(10, 10, 10, 10));
+        onionsBox = new CheckBox("Onion");
+        onionsBox.setPadding(new Insets(10, 10, 10, 10));
+        olivesBox = new CheckBox("Olive");
+        olivesBox.setPadding(new Insets(10, 10, 10, 10));
+        ecBox = new CheckBox("Extra Cheese");
+        ecBox.setPadding(new Insets(10, 10, 10, 10));
+     
 
         //sets up combo boxes
    
@@ -148,14 +208,26 @@ public class Main extends Application {
         typeBox.getItems().addAll("Pepperoni", "Cheese", "Veggie");
         typeBox.setValue("Select");
 
-        toppingBox = new ComboBox<String>();
-        toppingBox.getItems().addAll("Mushroom","Onions" ,"Olives" , "Extra Cheese");
-        toppingBox.setValue("Select");
-
         pickTimeBox = new ComboBox<String>();
-        //pickTimeBox.getItems().addAll(getDate());
-      //pickTimeBox.getItems().addAll("09/23/2022     12:00", "09/23/2022     12:30");
         pickTimeBox.setValue("Select");
+
+        mushroomBox = new CheckBox();
+     
+
+        for(int i = 0; i < 10; i++){
+
+            if( i == 0){
+                pickTimeBox.getItems().addAll(getDate(30));
+            }
+            else{
+                pickTimeBox.getItems().addAll(getDate(i * 15 + 30));
+            }
+            
+
+        }
+       
+      
+        
 
         //sets up text fields
         TextField asuIDBox = new TextField();
@@ -180,7 +252,7 @@ public class Main extends Application {
         botVbox.getChildren().addAll(orderButton);
         orderButton.setPrefHeight(50);
         orderButton.setPrefWidth(100);
-        botVbox.setPadding(new Insets(90, 10 , 20, 10));
+        botVbox.setPadding(new Insets(40, 10 , 20, 10));
 
         VBox orderStatusVBox = new VBox();
         orderStatusVBox.getChildren().addAll(statusLabel, statusLabel2);
@@ -189,7 +261,7 @@ public class Main extends Application {
         asuVBox.getChildren().addAll(asuIDLabel, asuIDBox);
         emailVbox.getChildren().addAll(emailLabel, emailBox);
         typeVBox.getChildren().addAll(typeLabel, typeBox);
-        toppingVbox.getChildren().addAll(toppingLabel, toppingBox);
+        toppingVbox.getChildren().addAll(toppingLabel, mushroomBox, onionsBox, olivesBox, ecBox);
         timeVbox.getChildren().addAll(pickUpTimeLabel, pickTimeBox);
 
         //Vboxes for each column
