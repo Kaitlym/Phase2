@@ -1,7 +1,5 @@
 package application;
 
-
-
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -57,6 +55,8 @@ public class Main extends Application {
 
     //order button
     private Button orderButton;
+    
+    private orderInfo orderInfo;
 
     /*************
      * Takes in int to add minutes to current time
@@ -104,6 +104,13 @@ public class Main extends Application {
 
     }
     
+    public  application.orderInfo orderInfo(orderInfo n ) {
+    	
+    	return orderInfo;
+    	
+    }
+
+    
     public void start(Stage primaryStage) {
 
         
@@ -122,9 +129,16 @@ public class Main extends Application {
                     confirm.setContentText("One or more boxes have no selections");
                 }
 
+                //should move to next screen
                 else{
+                
                 // set alert type
+                orderInfo = new orderInfo(getBoxContent(typeBox),getBoxContent(pickTimeBox),
+                		getToppingContent(mushroomBox),getToppingContent(onionsBox),
+                		getToppingContent(olivesBox), getToppingContent(ecBox));
+                //choose where this info goes 
                 confirm.setAlertType(AlertType.CONFIRMATION);
+                
 
                 confirm.setContentText("Pizza order has been placed! Look for where your pizza is at on the right!");
                 }
@@ -134,7 +148,9 @@ public class Main extends Application {
             
         };
         /** end onclick handler */
-
+        
+      
+        
         
 
 
