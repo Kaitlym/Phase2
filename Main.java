@@ -28,7 +28,6 @@ public class Main extends Application {
 	
 	// chef view page
 	HBox orderBox;
-	VBox mVb;
 	TitledPane orderSection, detailsSection, statusSection;
 	CheckBox cheeseTopping, pepperoniTopping, veggieTopping, extraCheeseTopping, 
 			baconTopping, mushroomTopping, onionTopping, oliveTopping;
@@ -68,13 +67,13 @@ public class Main extends Application {
 		homePageLayout.setPadding(new Insets(15));
 		homePageLayout.getChildren().addAll(box, grid);
  				
-		// chef view — title
-		Label chefViewTitle = new Label("Sun Devil Pizza — Chef View");
+		// chef view â€” title
+		Label chefViewTitle = new Label("Sun Devil Pizza â€” Chef View");
 		VBox hbt = new VBox();
 		hbt.setAlignment(Pos.CENTER);
 		hbt.getChildren().add(chefViewTitle);
 		
-		// chef view — orders section
+		// chef view â€” orders section
 		Label userID = new Label("sesolis@asu.edu");
 		GridPane orders = new GridPane();
 		orders.setHgap(10);
@@ -87,7 +86,7 @@ public class Main extends Application {
 		orderSection.setPrefHeight(60);
 		orderSection.setPadding(new Insets(10, 10, 10, 10));
 		
-		// chef view — pizza details section
+		// chef view â€” pizza details section
 		cheeseTopping = new CheckBox("Cheese");
 		pepperoniTopping = new CheckBox("Pepperoni");
 		veggieTopping = new CheckBox("Veggie");
@@ -148,7 +147,7 @@ public class Main extends Application {
 		setStatusButton.setOnAction(e -> setStatusButtonAction(t));
 		
 		// place everything into the chef view
-		Label cvTitle = new Label("Sun Devil Pizza — Chef View");
+		Label cvTitle = new Label("Sun Devil Pizza â€” Chef View");
  		chefViewLayout.setAlignment(Pos.CENTER);
  		chefViewLayout.getChildren().addAll(cvTitle, orderSection, detailsSection, statusSection, t);
 				
