@@ -1,6 +1,16 @@
-/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
-#button1 {
+.combo-box-base {
     -fx-font: 16px "Serif";
     -fx-padding: 10;
-    -fx-background-color: #CCFF99;
+}
+.Label {
+    -fx-font: 16px "Serif";
+    -fx-padding: 10;
+}
+.button {
+    -fx-font: 16px "Serif";
+    -fx-padding: 10;
+}
+.checkbox .box {
+    -fx-font: 16px "Serif";
+    -fx-padding: 10;
 }
