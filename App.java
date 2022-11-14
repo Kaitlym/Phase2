@@ -13,6 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -41,17 +42,10 @@ public class Main extends Application {
     private TextField emailBox;
 
     //labels
-    private Label statusLabel;
-    private Label statusLabel2;
     private Label typeLabel;
     private Label orderForm;
-    private Label orderStatus;
-    private Label  asuIDLabel;
-    private Label emailLabel;
     private Label toppingLabel;
     private Label pickUpTimeLabel;
-    //private Label formMsg;
-    //private Label orderMsg;
 
     //order button
     private Button orderButton;
@@ -120,9 +114,7 @@ public class Main extends Application {
         EventHandler<ActionEvent> order = new EventHandler<ActionEvent>() {
 
             public void handle(ActionEvent e){
-                typeBox.setValue("Select");
-
-           
+            	           
                 if(typeBox.getValue() == "Select" || pickTimeBox.getValue() == "Select" ){
 
                     confirm.setAlertType(AlertType.ERROR);
@@ -156,15 +148,6 @@ public class Main extends Application {
 
 
         //sets up labels
-        statusLabel = new Label("Order Status");
-        statusLabel.setPadding(new Insets(10, 10, 10, 10));
-        statusLabel.setStyle("-fx-font: 14 Verdana; FontWeight.BOLD");
-
-        statusLabel2 = new Label("Accepted");
-        statusLabel2.setPadding(new Insets(10, 10, 10, 10));
-        statusLabel2.setStyle("-fx-font: 14 Verdana; FontWeight.BOLD");
-
-
         typeLabel = new Label("Type");
         typeLabel.setPadding(new Insets(10, 10, 10, 10));
         typeLabel.setStyle("-fx-font: 14 Verdana; FontWeight.BOLD");
@@ -172,19 +155,7 @@ public class Main extends Application {
         orderForm =  new Label("Order Form");
         orderForm.setPadding(new Insets(10, 50, 10, 10));
         orderForm.setFont(Font.font("Verdana", FontWeight.BOLD, 24));
-
-        orderStatus = new Label("Order Staus");
-        orderStatus.setPadding(new Insets(10, 10, 10, 250));
-        orderStatus.setFont(Font.font("Verdana", FontWeight.BOLD, 24));
-
-        asuIDLabel = new Label("ASURITE ID");
-        asuIDLabel.setPadding(new Insets(10, 10, 10, 10));
-        asuIDLabel.setStyle("-fx-font: 14 Verdana;");
-
-        emailLabel = new Label("Email");
-        emailLabel.setPadding(new Insets(10, 10, 10, 10));
-        emailLabel.setStyle("-fx-font: 14 Verdana;");
-
+        
         toppingLabel = new Label("Toppings");
         toppingLabel.setPadding(new Insets(10, 10, 20, 10));
         toppingLabel.setStyle("-fx-font: 14 Verdana;");
@@ -192,21 +163,6 @@ public class Main extends Application {
         pickUpTimeLabel = new Label("Pickup");
         pickUpTimeLabel.setPadding(new Insets(10, 10, 10, 10));
         pickUpTimeLabel.setStyle("-fx-font: 14 Verdana; FontWeight.BOLD");
-
-
-        /*** can organize above labels with style cheat***/
-    
-        //*****needs to be styled and added with Vbox, and Hbox 
-        /* 
-        formMsg = new Label("Order Staus");
-        formMsg.setPadding(new Insets(10, 10, 10, 10));
-        formMsg.setStyle("-fx-font: 14 Verdana;");
-        orderMsg = new Label("Order Staus");
-        orderMsg.setPadding(new Insets(10, 10, 10, 10));
-        orderMsg.setStyle("-fx-font: 14 Verdana;");
-        ***/
-        
-
 
         mushroomBox = new CheckBox("Mushroom");
         mushroomBox.setPadding(new Insets(10, 10, 10, 10));
@@ -226,8 +182,6 @@ public class Main extends Application {
 
         pickTimeBox = new ComboBox<String>();
         pickTimeBox.setValue("Select");
-
-        mushroomBox = new CheckBox();
      
 
         for(int i = 0; i < 10; i++){
@@ -243,12 +197,6 @@ public class Main extends Application {
         }
        
       
-        
-
-        //sets up text fields
-        TextField asuIDBox = new TextField();
-        TextField emailBox = new TextField();
-
         //sets up orderButton
         Button orderButton = new Button();
         orderButton.setText("Order Pizza");
@@ -257,8 +205,6 @@ public class Main extends Application {
         
 
         //each needs a vbox so label will be ontop
-        VBox asuVBox = new VBox();
-        VBox emailVbox = new VBox();
         VBox typeVBox = new VBox();
         VBox toppingVbox = new VBox();
         VBox timeVbox = new VBox();
@@ -270,14 +216,9 @@ public class Main extends Application {
         orderButton.setPrefWidth(100);
         botVbox.setPadding(new Insets(40, 10 , 20, 10));
 
-        VBox orderStatusVBox = new VBox();
-        orderStatusVBox.getChildren().addAll(statusLabel, statusLabel2);
 
-
-        asuVBox.getChildren().addAll(asuIDLabel, asuIDBox);
-        emailVbox.getChildren().addAll(emailLabel, emailBox);
         typeVBox.getChildren().addAll(typeLabel, typeBox);
-        toppingVbox.getChildren().addAll(toppingLabel, mushroomBox, onionsBox, olivesBox, ecBox);
+        toppingVbox.getChildren().addAll(toppingLabel, onionsBox, mushroomBox,  olivesBox, ecBox);
         timeVbox.getChildren().addAll(pickUpTimeLabel, pickTimeBox);
 
         //Vboxes for each column
@@ -285,8 +226,8 @@ public class Main extends Application {
         VBox leftCol = new VBox();
         VBox rightCol = new VBox();
 
-        leftCol.getChildren().addAll(asuVBox, typeVBox, timeVbox);
-        rightCol.getChildren().addAll(emailVbox, toppingVbox, botVbox);
+        leftCol.getChildren().addAll(typeVBox, timeVbox);
+        rightCol.getChildren().addAll(toppingVbox, botVbox);
 
       
         
@@ -297,30 +238,25 @@ public class Main extends Application {
         //base scene
         BorderPane root = new BorderPane();
        
-        HBox rightBox = new HBox();
         HBox leftBox = new HBox();
         HBox top = new HBox();
 
-        rightBox.getChildren().addAll(orderStatusVBox);
         leftBox.getChildren().addAll(leftCol, rightCol);
-        top.getChildren().addAll(orderForm, orderStatus);
+        top.getChildren().addAll(orderForm);
 
-        orderStatusVBox.setPadding(new Insets(50, 10, 10, 10));
-        leftCol.setPadding(new Insets(30, 10, 10, 10));
-        rightCol.setPadding(new Insets(30, 10, 10, 10));
+        //leftCol.setPadding(new Insets(30, 10, 10, 10));
+       // rightCol.setPadding(new Insets(30, 10, 10, 10));
 
 
-        root.setLeft(leftBox);
-        root.setRight(rightBox);
+        root.setCenter(leftBox);
         root.setTop(top);
         top.setPadding(new Insets(10, 10, 30, 20));
-        rightBox.setPadding(new Insets(30, 10, 10, 10));
-        leftBox.setPadding(new Insets(30, 10, 10, 10));
+        leftBox.setPadding(new Insets(30, 10, 50, 150));
 
         top.setStyle("-fx-border-color: black");
 
     
-       orderButton.setId("button1");
+        orderButton.setId("button1");
         
         // Construct a scene wit, width, and height
         Scene scene = new Scene(root, 700, 500); 
